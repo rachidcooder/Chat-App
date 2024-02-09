@@ -20,32 +20,40 @@ function InputSend() {
   const handleSend = async () => {
 
     try {
-      if (!text) return;
+      if (!text && !pic) return;
       else {
-        await updateDoc(doc(db, "chats", data.chatId), {
-          messges: arrayUnion({
-            id: uuid(),
-            text: text,
-            senderId: user.uid,
-            date: Timestamp.now(),
+        if (text) {
+          await updateDoc(doc(db, "chats", data.chatId), {
+            messges: arrayUnion({
+              id: uuid(),
+              text: text,
+              senderId: user.uid,
+              date: Timestamp.now(),
+            })
           })
-        })
 
-        await updateDoc(doc(db, "user-chats", user.uid), {
-          [data.chatId + ".lastMessage"]: {
-            text,
-          },
-          [data.chatId + ".date"]: serverTimestamp(),
-        })
-        await updateDoc(doc(db, "user-chats", data.user.uid), {
-          [data.chatId + ".lastMessage"]: {
-            text
-          },
-          [data.chatId + ".date"]: serverTimestamp(),
-        })
+          await updateDoc(doc(db, "user-chats", user.uid), {
+            [data.chatId + ".lastMessage"]: {
+              text,
+            },
+            [data.chatId + ".date"]: serverTimestamp(),
+          })
+          await updateDoc(doc(db, "user-chats", data.user.uid), {
+            [data.chatId + ".lastMessage"]: {
+              text
+            },
+            [data.chatId + ".date"]: serverTimestamp(),
+          })
+          setText("");
+        }
+        if (pic) {
+
+          return
+        }
 
 
-        setText("");
+
+
       }
 
     } catch (err) {
@@ -68,7 +76,10 @@ function InputSend() {
         </label>
         <input type='file' id='file'
           className=' hidden py-1  px-1 border-b-2 border-gray700 border-spacing-y-px outline-none'
-          placeholder='add an avatar' />
+          placeholder='add an avatar'
+          value={pic}
+          onChange={(e) => { setPic(e.target.files[0]) }}
+        />
 
 
         <IoSend size={25} className=' text-backgr mx-2 hover:text-navBarBg' onClick={() => handleSend()} />

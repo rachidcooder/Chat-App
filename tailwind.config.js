@@ -17,7 +17,8 @@ export default {
       "gray500": "#64748b",
       "gray100": '#f1f5f9',
       "gray300": '#cbd5e1',
-      "hoverChats": "#565974"
+      "hoverChats": "#565974",
+      "red": "#dc2626"
     },
 
   },

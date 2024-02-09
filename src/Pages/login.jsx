@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { toast, ToastContainer } from 'react-toastify'
+import { auth } from '../firebase';
 
 
 
@@ -8,17 +10,35 @@ function login() {
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const navigate = useNavigate();
+  const [err, setErr] = useState("");
 
-  const [err, setErr] = useState(false);
+  const toastOption = {
+    position: "bottom-right",
+    autoClose: 3000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "dark",
+  }
 
   const OnLogin = async () => {
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValidEmail = emailRegex.test(email);
+    if (!isValidEmail) {
+      // toast.error("Please enter a valid email!!", toastOption);
+      setEmail("Please enter a valid email")
+      return false;
+    }
+
     try {
       const res = await signInWithEmailAndPassword(auth, email, pw)
+
+      console.log(" res login : ", res);
+
       navigate("/")
-    } catch (err) {
-      setErr(true);
-      console.log(err);
+    } catch (er) {
+      setErr("Something went wrong check email or password");
+      console.log(er);
     }
 
 
@@ -49,7 +69,7 @@ function login() {
           <button className='text-xl bg-backgr text-center rounded hover:bg-titleC'
             onClick={() => { OnLogin() }}
           >Sign in</button>
-          {err && <span className='p-2 text-borders'>Something went wrong !</span>}
+          {err && <span className='p-2 text-red'>{err}!</span>}
           <span>
             You don't have an account ? <Link to={'/register'} className=' text-gray700 text-xl font-semibold'>Register</Link>
           </span>
@@ -57,6 +77,7 @@ function login() {
         </div>
 
       </div>
+
     </div>
   )
 }

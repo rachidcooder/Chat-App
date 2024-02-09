@@ -6,27 +6,55 @@ import { getStorage, ref, uploadBytes, getDownloadURL, uploadBytesResumable } fr
 import { doc, setDoc } from "firebase/firestore";
 import { Link, useNavigate } from 'react-router-dom';
 import { ChatState } from '../context/ChatProvider';
+import { toast, ToastContainer } from 'react-toastify'
 
 function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [pic, setPic] = useState("");
-  const [err, setErr] = useState(false);
+  const [err, setErr] = useState("");
   const { setUser } = ChatState()
 
   const navigate = useNavigate();
+
+  const toastOption = {
+    position: "bottom-right",
+    autoClose: 3000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "white",
+  };
+
+
   const onReg = async () => {
     const storage = getStorage();
 
+    //---------------------Valid Info --------------------------------------
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const isValidEmail = emailRegex.test(email);
+    if (!isValidEmail) {
+      //toast.error("Please enter a valid email!!", toastOption);
+      setErr("Please enter a valid email")
+      return false;
+    }
+    if (name.length <= 3) {
+      //toast.error("name must be longer!", toastOption);
+      setErr("name must be longer")
+      return;
+    }
+    if (pw.length < 6) {
+      //toast.error("Password must be longer!", toastOption);
+      setErr("Password must be longer");
+      return;
+    }
+    //----------------------------------------------------------------
     try {
 
       const res = await createUserWithEmailAndPassword(auth, email, pw);
 
       const imgRef = ref(storage, `Profiles/${res.user.uid}`);
-      // const rs = await uploadBytes(imgRef, pic).then((snapshot) => {
-      //   console.log('Uploaded a blob or file :', snapshot);
-      // });
 
       const uploadTask = uploadBytesResumable(imgRef, pic);
 
@@ -60,7 +88,7 @@ function Register() {
 
     } catch (err) {
       console.log(err);
-      setErr(true);
+      setErr("Something wrong ");
     }
 
 
@@ -108,14 +136,14 @@ function Register() {
           <button className='text-xl bg-backgr text-center rounded hover:bg-titleC'
             onClick={() => { onReg() }}
           >Sign up</button>
-          {err && <span className='p-2 text-borders'>Something went wrong !</span>}
+          {err && <span className='p-2 text-red text-xl'>{err} !</span>}
           <span>
             You  have an account ? <Link to={'/login'} className=' text-gray700 text-xl font-semibold'>Login</Link>
           </span>
 
         </div>
-
       </div>
+
     </div>
   )
 }
