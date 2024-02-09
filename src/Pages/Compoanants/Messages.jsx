@@ -64,7 +64,7 @@ function Messages() {
   return (
 
 
-    <div className='  p-2  min-h-96'>
+    <div className='  p-2  min-h-96 flex flex-col items-stretch  '>
 
       {messages ? (messages.map((item, i) => {
         return (
@@ -75,9 +75,11 @@ function Messages() {
           </div>
         )
       })) : (
-        <div className=' flex justify-center items-center text-white h-full  '>
-          <h1 className=' text-3xl items-center p-4 font-semibold text-center  '>Search for users by name or select a chat !</h1>
-        </div>
+        !data &&
+        (<div className=' flex-col self-center flex justify-center items-center text-white h-full  p-4 font-semibold text-center '>
+          <h1 className=' text-4xl font-bold p-1'> Search for users</h1>
+          <h2 className=' text-3xl font-semibold p-1'> by name or select a chat !</h2>
+        </div>)
       )
       }
 

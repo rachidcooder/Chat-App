@@ -100,7 +100,7 @@ function SearchBar() {
             <img src={userS.photoURL} alt="" className='rounded-full h-10 w-10' />
             <div className='text-white  px-3'>
               <h1 className='text-xl font-semibold px-1'>{userS.displayName}</h1>
-              <h3 className=' text-gray300'>last message</h3>
+              <h3 className=' text-gray300'></h3>
             </div>
           </a>
         )

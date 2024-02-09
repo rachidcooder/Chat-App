@@ -8,7 +8,7 @@ function Chat() {
     <div className='flex flex-col  h-[100%]  relative  '>
       <Navchat />
 
-      <div className=' h-[80%] overflow-y-scroll'>
+      <div className=' h-[85%] overflow-y-scroll scrollbar scrollbar-thumb-gray500'>
         <Messages />
       </div>
 
