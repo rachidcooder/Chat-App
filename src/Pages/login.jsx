@@ -26,7 +26,7 @@ function login() {
     const isValidEmail = emailRegex.test(email);
     if (!isValidEmail) {
       // toast.error("Please enter a valid email!!", toastOption);
-      setEmail("Please enter a valid email")
+      setErr("Please enter a valid email")
       return false;
     }
 
