@@ -13,6 +13,7 @@ import { ChatState } from '../../context/ChatProvider';
 
 function InputSend() {
   const [text, setText] = useState("")
+  const [pic, setPic] = useState();
   const { data } = chatChangState()
   const { user } = ChatState();
 
@@ -59,8 +60,18 @@ function InputSend() {
       />
       <div className='flex p-1 justify-end space-x-1'>
         <IoIosOptions size={25} className='mx-2' />
-        <AiOutlinePicture size={25} className='mx-2' />
-        <IoSend size={25} className=' text-backgr mx-2' onClick={() => handleSend()} />
+
+
+
+
+        <label htmlFor='file' className=' flex justify-center'>    <AiOutlinePicture size={25} className='mx-2' />
+        </label>
+        <input type='file' id='file'
+          className=' hidden py-1  px-1 border-b-2 border-gray700 border-spacing-y-px outline-none'
+          placeholder='add an avatar' />
+
+
+        <IoSend size={25} className=' text-backgr mx-2 hover:text-navBarBg' onClick={() => handleSend()} />
       </div>
 
     </div>
